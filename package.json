@@ -1,0 +1,20 @@
+{
+  "name": "bcrypt-gen",
+  "version": "1.0.0",
+  "description": "bcrypt-gen is a command-line tool designed to generate bcrypt hashes conveniently and securely. It provides an easy-to-use interface for hashing passwords directly from the terminal, ensuring enhanced security for your applications.",
+  "main": "bin/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bcrypt",
+    "hash",
+    "cli",
+    "password"
+  ],
+  "author": "Fabio Almeida",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1"
+  }
+}

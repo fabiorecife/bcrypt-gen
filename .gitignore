@@ -1,0 +1,40 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.test
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+
+# npm package metadata and lockfiles
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Typescript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional jest cache directory
+/jest
+
+# Coverage directory used by tools like istanbul
+coverage/
