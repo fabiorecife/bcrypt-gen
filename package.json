@@ -16,5 +16,9 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1"
-  }
+  },
+  "repository": {
+     "type": "git",
+     "url": "https://github.com/fabiorecife/bcrypt-gen.git"
+   }
 }
