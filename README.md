@@ -40,9 +40,25 @@ When you run the command, you will be prompted to enter the password for which y
 
 ```sh
 $ npx bcrypt-gen
-Enter the password to generate the hash: mypassword
-Generated hash: $2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36LgNG8nWQzHA5sz8UCeQKG
+Enter the password to generate the hash: 123
+Enter the number of salt rounds (or press Enter for default 10): 
+Generated hash: $2b$10$JnIM0IXCTThg/oXZ6nJFi.8DakzRT9RgTOCPNJQzAMDVeWA3w2iZ6
+
 ```
+
+```sh
+$ npx bcrypt-gen -h                                                                     
+
+Usage:
+  -h            Show this help message
+  -i            Interactive mode with questions for password and rounds
+  -v <hash> <password> Verify if the password matches the given hash
+  -c <password> <saltRounds> Generate hash for the given password with custom saltRounds
+  -p <password> Generate hash for the given password with default saltRounds (10)
+  No arguments  Default behaviour, asks for all inputs interactively
+
+```
+
 
 ## Features
 
