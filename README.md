@@ -48,7 +48,7 @@ Generated hash: $2b$10$JnIM0IXCTThg/oXZ6nJFi.8DakzRT9RgTOCPNJQzAMDVeWA3w2iZ6
 
 ```sh
 $ npx bcrypt-gen -h                                                                     
-
+version 1.1.1
 Usage:
   -h            Show this help message
   -i            Interactive mode with questions for password and rounds
