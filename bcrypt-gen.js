@@ -37,6 +37,7 @@ const args = process.argv.slice(2);
 
 if (args.includes('-h')) {
     console.log(`
+version 1.1.1
 Usage:
   -h            Show this help message
   -i            Interactive mode with questions for password and rounds
