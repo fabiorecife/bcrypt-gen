@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const bcrypt = require('bcrypt');
+const yargs = require('yargs');
 const readline = require('readline');
 const rl = readline.createInterface({
     input: process.stdin,
@@ -32,104 +33,8 @@ async function verifyHash(hash, password) {
         return false;
     }
 }
-// Processando argumentos da CLI
-const args = process.argv.slice(2);
-
-if (args.includes('-h')) {
-    console.log(`
-version 1.1.1
-Usage:
-  -h            Show this help message
-  -i            Interactive mode with questions for password and rounds
-  -v <hash> <password> Verify if the password matches the given hash
-  -c <password> <saltRounds> Generate hash for the given password with custom saltRounds
-  -p <password> Generate hash for the given password with default saltRounds (10)
-  No arguments  Default behaviour, asks for all inputs interactively
-`);
-    rl.close();
-} else if (args.includes('-i')) {
-    // Modo interativo (padrão existente)
-    rl.question('Enter the password to generate the hash: ', (password) => {
-        rl.question('Enter the number of salt rounds (or press Enter for default 10): ', (saltInput) => {
-            const saltRounds = parseInt(saltInput, 10) || 10; // Padrão para 10 se a entrada for inválida ou vazia
-            generateHash(password, saltRounds).then(hash => {
-                if (hash) {
-                    console.log("Generated hash:", hash);
-                }
-                rl.close();
-            }).catch(error => {
-                console.error("Error:", error);
-                rl.close();
-            });
-        });
-    });
-} else if (args.includes('-v')) {
-    // Modo de verificação
-    const index = args.indexOf('-v');
-    const hash = args[index + 1]; // Recebe o hash do argumento
-    const password = args[index + 2]; // Recebe a senha
-
-    if (!hash || !password) {
-        console.error("Error: You must provide a hash and a password with the -v option.");
-        console.log("Use -h for help.");
-        rl.close();
-    } else {
-        // Verifica se a senha mata com o hash
-        verifyHash(hash, password).then(isMatch => {
-            if (isMatch) {
-                console.log(" ✅ Success - Password matches the hash.");
-            } else {
-                console.error("❌ Error - Password does not match the hash.");
-            }
-            rl.close();
-        }).catch(error => {
-            console.error("Error:", error);
-            rl.close();
-        });
-    }
-} else if (args.includes('-c')) {
-    // Modo de saltRounds customizados
-    const index = args.indexOf('-c');
-    const password = args[index + 1];
-    const saltRounds = parseInt(args[index + 2], 10);
-
-    if (!password || isNaN(saltRounds)) {
-        console.error("Error: You must provide a password and valid saltRounds with the -c option.");
-        console.log("Use -h for help.");
-        rl.close();
-    } else {
-        generateHash(password, saltRounds).then(hash => {
-            if (hash) {
-                console.log("Generated hash:", hash); // Gera o hash com rounds customizados
-            }
-            rl.close();
-        }).catch(error => {
-            console.error("Error:", error);
-            rl.close();
-        });
-    }
-} else if (args.includes('-p')) {
-    // Modo com rounds padrão (10)
-    const index = args.indexOf('-p');
-    const password = args[index + 1];
-
-    if (!password) {
-        console.error("Error: You must provide a password with the -p option.");
-        console.log("Use -h for help.");
-        rl.close();
-    } else {
-        generateHash(password).then(hash => {
-            if (hash) {
-                console.log("Generated hash:", hash); // Mostra o hash gerado com rounds padrão
-            }
-            rl.close();
-        }).catch(error => {
-            console.error("Error:", error);
-            rl.close();
-        });
-    }
-} else {
-    // Padrão: modo interativo
+// Interactive mode function
+function runInteractiveMode() {
     rl.question('Enter the password to generate the hash: ', (password) => {
         rl.question('Enter the number of salt rounds (or press Enter for default 10): ', (saltInput) => {
             const saltRounds = parseInt(saltInput, 10) || 10;
@@ -144,4 +49,119 @@ Usage:
             });
         });
     });
+}
+
+// Configure yargs
+const argv = yargs
+    .usage('Usage: $0 [options]')
+    .version('1.1.1')
+    .option('h', {
+        alias: 'help',
+        describe: 'Show this help message',
+        type: 'boolean'
+    })
+    .option('i', {
+        alias: 'interactive',
+        describe: 'Interactive mode with questions for password and rounds',
+        type: 'boolean'
+    })
+    .option('v', {
+        alias: 'verify',
+        describe: 'Verify if the password matches the given hash',
+        type: 'boolean'
+    })
+    .option('c', {
+        alias: 'custom',
+        describe: 'Generate hash for the given password with custom saltRounds',
+        type: 'boolean'
+    })
+    .option('p', {
+        alias: 'password',
+        describe: 'Generate hash for the given password with default saltRounds (10)',
+        type: 'boolean'
+    })
+    .option('hash', {
+        describe: 'Hash to verify (used with -v)',
+        type: 'string'
+    })
+    .option('pwd', {
+        describe: 'Password to hash or verify',
+        type: 'string'
+    })
+    .option('rounds', {
+        describe: 'Number of salt rounds (used with -c)',
+        type: 'number'
+    })
+    .example('$0 -i', 'Run in interactive mode')
+    .example('$0 -v --hash "$2b$10$..." --pwd "mypassword"', 'Verify if password matches hash')
+    .example('$0 -c --pwd "mypassword" --rounds 12', 'Generate hash with custom salt rounds')
+    .example('$0 -p --pwd "mypassword"', 'Generate hash with default salt rounds (10)')
+    .help('h')
+    .argv;
+
+// Process commands based on yargs arguments
+if (argv.v) {
+    // Verify mode
+    const hash = argv.hash;
+    const password = argv.pwd;
+
+    if (!hash || !password) {
+        console.error("Error: You must provide a hash and a password with the -v option.");
+        console.log("Use -h for help.");
+        rl.close();
+    } else {
+        verifyHash(hash, password).then(isMatch => {
+            if (isMatch) {
+                console.log(" ✅ Success - Password matches the hash.");
+            } else {
+                console.error("❌ Error - Password does not match the hash.");
+            }
+            rl.close();
+        }).catch(error => {
+            console.error("Error:", error);
+            rl.close();
+        });
+    }
+} else if (argv.c) {
+    // Custom salt rounds mode
+    const password = argv.pwd;
+    const saltRounds = argv.rounds;
+
+    if (!password || isNaN(saltRounds)) {
+        console.error("Error: You must provide a password and valid saltRounds with the -c option.");
+        console.log("Use -h for help.");
+        rl.close();
+    } else {
+        generateHash(password, saltRounds).then(hash => {
+            if (hash) {
+                console.log("Generated hash:", hash);
+            }
+            rl.close();
+        }).catch(error => {
+            console.error("Error:", error);
+            rl.close();
+        });
+    }
+} else if (argv.p) {
+    // Default salt rounds mode
+    const password = argv.pwd;
+
+    if (!password) {
+        console.error("Error: You must provide a password with the -p option.");
+        console.log("Use -h for help.");
+        rl.close();
+    } else {
+        generateHash(password).then(hash => {
+            if (hash) {
+                console.log("Generated hash:", hash);
+            }
+            rl.close();
+        }).catch(error => {
+            console.error("Error:", error);
+            rl.close();
+        });
+    }
+} else if (argv.i || Object.keys(argv).length <= 2) {
+    // Interactive mode (either explicitly requested or default behavior)
+    runInteractiveMode();
 }
