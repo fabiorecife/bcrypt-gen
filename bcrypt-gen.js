@@ -41,6 +41,7 @@ function runInteractiveMode() {
             generateHash(password, saltRounds).then(hash => {
                 if (hash) {
                     console.log("Generated hash:", hash);
+                    console.log("Tip: use -h to see help.");
                 }
                 rl.close();
             }).catch(error => {
@@ -137,6 +138,7 @@ if (require.main === module) {
             generateHash(password, saltRounds).then(hash => {
                 if (hash) {
                     console.log("Generated hash:", hash);
+                    console.log("Tip: use -h to see help.");
                 }
                 rl.close();
             }).catch(error => {
@@ -156,6 +158,7 @@ if (require.main === module) {
             generateHash(password).then(hash => {
                 if (hash) {
                     console.log("Generated hash:", hash);
+                    console.log("Tip: use -h to see help.");
                 }
                 rl.close();
             }).catch(error => {
