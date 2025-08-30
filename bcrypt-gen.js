@@ -11,8 +11,7 @@ const rl = readline.createInterface({
 async function generateHash(password, saltRounds = 10) {
     try {
         const salt = await bcrypt.genSalt(saltRounds);
-        const hash = await bcrypt.hash(password, salt);
-        return hash;
+        return await bcrypt.hash(password, salt);
     } catch (error) {
         console.error("Error generating the hash:", error);
     }
@@ -26,8 +25,7 @@ async function verifyHash(hash, password) {
             return false;
         }
 
-        const isMatch = await bcrypt.compare(password, hash);
-        return isMatch;
+        return await bcrypt.compare(password, hash);
     } catch (error) {
         console.error("Error verifying the hash:", error);
         return false;
