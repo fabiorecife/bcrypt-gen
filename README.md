@@ -1,5 +1,10 @@
 # bcrypt-gen
 
+[![npm version](https://badge.fury.io/js/bcrypt-gen.svg)](https://badge.fury.io/js/bcrypt-gen)
+[![npm downloads](https://img.shields.io/npm/dt/bcrypt-gen.svg)](https://www.npmjs.com/package/bcrypt-gen)
+[![license](https://img.shields.io/npm/l/bcrypt-gen.svg)](https://github.com/fabiorecife/bcrypt-gen/blob/main/LICENSE)
+
+
 `bcrypt-gen` is a command-line tool designed to generate bcrypt hashes conveniently and securely. It provides an easy-to-use interface for hashing passwords directly from the terminal, ensuring enhanced security for your applications.
 
 ## Installation
